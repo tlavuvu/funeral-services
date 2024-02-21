@@ -1,0 +1,5 @@
+za\co\supremeworx\model\Inventory.class
+za\co\supremeworx\service\InventoryService.class
+za\co\supremeworx\repository\InventoryRepository.class
+za\co\supremeworx\controller\InventoryController.class
+za\co\supremeworx\InventoryServiceApplication.class

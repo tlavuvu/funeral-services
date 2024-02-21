@@ -1,0 +1,10 @@
+za\co\supremeworx\dto\ProductResponse.class
+za\co\supremeworx\model\Product$ProductBuilder.class
+za\co\supremeworx\dto\ProductResponse$ProductResponseBuilder.class
+za\co\supremeworx\dto\ProductRequest$ProductRequestBuilder.class
+za\co\supremeworx\controllers\ProductController.class
+za\co\supremeworx\services\ProductService.class
+za\co\supremeworx\model\Product.class
+za\co\supremeworx\ProductServiceApplication.class
+za\co\supremeworx\repositories\ProductRepository.class
+za\co\supremeworx\dto\ProductRequest.class
