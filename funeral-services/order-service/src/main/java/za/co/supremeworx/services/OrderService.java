@@ -1,21 +1,25 @@
 package za.co.supremeworx.services;
 
 import java.util.UUID;
+import java.util.function.Predicate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
-
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Arrays;
 import java.util.List;
+import za.co.supremeworx.dto.InventoryResponse;
 import za.co.supremeworx.dto.OrderLineItemsDto;
 import za.co.supremeworx.dto.OrderRequest;
 import za.co.supremeworx.model.Order;
 import za.co.supremeworx.model.OrderLineItems;
 import za.co.supremeworx.repository.OrderRepository;
-import za.co.supremeworx.utils.CustomProperties;
+//import za.co.supremeworx.utils.CustomProperties;
 
 
 @Slf4j
@@ -26,8 +30,8 @@ public class OrderService {
 	@Autowired
 	private OrderRepository orderRepository;
 	
-	@Autowired
-	private CustomProperties customProperties;
+//	@Autowired
+//	private CustomProperties customProperties;
 	
 	@Autowired
 	private WebClient webClient;
@@ -48,22 +52,33 @@ public class OrderService {
 		
 		List<String> skuCodes = order.getOrderLineItemsList()
 		.stream()
-		.map(OrderLineItems::getSkuCode)
+		.map(t -> t.getSkuCode())
 		.toList();
 		
-		log.info("Items {}",skuCodes);
+//		adding skuCodes into query params
+		MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+		for(String sk:skuCodes) {
+			queryParams.add("skuCode", sk);
+		}
+		
+		
+		log.info("skuCodes {}",skuCodes);
 		
 //		Call inventory service to check if we have stock
-		Boolean result = webClient.get()
-			.uri(customProperties.getInventoryservicesuri())
+		InventoryResponse[] inventoryResponseArray = webClient.get()
+			.uri("http://localhost:1002/api/inventory",uriBuilder -> uriBuilder.queryParams(queryParams).build())
 			.retrieve()
-			.bodyToMono(Boolean.class)
+			.bodyToMono(InventoryResponse[].class)
 			.block();
 		
-		if(result) {
+//		Predicate<InventoryResponse[]> pr = t -> t.length < 1;
+		
+		boolean productsInStock = Arrays.stream(inventoryResponseArray).allMatch(t -> t.isInStock());
+		
+		if(productsInStock) {
 			orderRepository.save(order);
 		}else {
-			log.warn("Product {} not in stock");
+			log.info("Product not in stock");
 			throw new IllegalArgumentException("Product not in stock");
 		}
 //		-----------------------------------------
