@@ -19,8 +19,5 @@ public class Address {
 	private String street_name;
 	private String town;
 	private String postal_code;
-	
-	@OneToMany
-	private Person person;
 
 }

@@ -1,5 +1,8 @@
 package za.co.supremeworx.services;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,6 +11,7 @@ import za.co.supremeworx.model.Member;
 import za.co.supremeworx.repositories.MemberRepository;
 import za.co.supremeworx.requests.MemberRegisterRequest;
 import za.co.supremeworx.responses.MemberRegisterResponse;
+import za.co.supremeworx.utils.ListUtils;
 
 @Service
 @Slf4j
@@ -15,6 +19,9 @@ public class MemberService {
 	
 	@Autowired
 	private MemberRepository memberRepository;
+	
+	@Autowired
+	private ListUtils listUtils;
 	
 	public MemberRegisterResponse registerMember(MemberRegisterRequest memberRegisterRequest) {
 		String memberNumber = createMemberNumber(memberRegisterRequest);
@@ -25,6 +32,22 @@ public class MemberService {
 		Member registeredMember = memberRepository.save(member);
 		return mapMemberToMemberRegisterResponse(registeredMember);
 		
+	}
+	
+	public List<Member> fetchAllMembers(){
+		return listUtils.convertIterateToList(memberRepository.findAll());
+	}
+	
+	public Member searchMemberByMemberNumber(String memberNumber) {
+		Optional<Member> opt = memberRepository.findByMemberNumber(memberNumber);
+		
+		if(opt.isPresent()) {
+			log.info("Member with member number {} found ", memberNumber);
+			return opt.get();
+		}else {
+			log.info("Member with member number {} not found ", memberNumber);
+			return new Member();
+		}
 	}
 	
 	public String createMemberNumber(MemberRegisterRequest memberRegisterRequest) {
@@ -60,6 +83,7 @@ public class MemberService {
 		memberRegisterResponse.setTitle(member.getTitle());
 		memberRegisterResponse.setBirthdate(member.getBirthdate());
 		memberRegisterResponse.setAddress(member.getAddress());
+		memberRegisterResponse.setMemberNumber(member.getMemberNumber());
 		return memberRegisterResponse;
 	}
 

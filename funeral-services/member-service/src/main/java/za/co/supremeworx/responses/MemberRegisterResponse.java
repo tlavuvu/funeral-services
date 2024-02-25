@@ -16,5 +16,6 @@ public class MemberRegisterResponse {
 	private String title;
 	private String birthdate;
 	private Address address;
+	private String memberNumber;
 
 }

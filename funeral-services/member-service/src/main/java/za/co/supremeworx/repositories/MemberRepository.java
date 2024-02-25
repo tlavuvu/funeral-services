@@ -10,7 +10,7 @@ import za.co.supremeworx.model.Member;
 @Repository
 public interface MemberRepository extends CrudRepository<Member, Integer> {
 	
-	public Optional<Member> findByMemberNumber(int memberNumber);
+	public Optional<Member> findByMemberNumber(String memberNumber);
 	
 	
 

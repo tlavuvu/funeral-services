@@ -18,7 +18,7 @@ public class Member extends Person{
 	private Integer id;
 	
 	
-	private int memberNumber;
+	private String memberNumber;
 	private String email;
 	private String mobile;
 	
