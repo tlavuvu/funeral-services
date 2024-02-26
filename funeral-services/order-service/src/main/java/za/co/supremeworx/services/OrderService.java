@@ -4,6 +4,7 @@ import java.util.UUID;
 import java.util.function.Predicate;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
@@ -16,6 +17,7 @@ import java.util.List;
 import za.co.supremeworx.dto.InventoryResponse;
 import za.co.supremeworx.dto.OrderLineItemsDto;
 import za.co.supremeworx.dto.OrderRequest;
+import za.co.supremeworx.event.OrderPlacedEvent;
 import za.co.supremeworx.model.Order;
 import za.co.supremeworx.model.OrderLineItems;
 import za.co.supremeworx.repository.OrderRepository;
@@ -32,6 +34,9 @@ public class OrderService {
 	
 //	@Autowired
 //	private CustomProperties customProperties;
+	
+	@Autowired
+	private KafkaTemplate<String,OrderPlacedEvent> kafkaTemplate;
 	
 	@Autowired
 	private WebClient webClient;
@@ -77,6 +82,7 @@ public class OrderService {
 		
 		if(productsInStock) {
 			orderRepository.save(order);
+			kafkaTemplate.send("notificationTopic", new OrderPlacedEvent(order.getOrderNumber()));
 		}else {
 			log.info("Product not in stock");
 			throw new IllegalArgumentException("Product not in stock");
