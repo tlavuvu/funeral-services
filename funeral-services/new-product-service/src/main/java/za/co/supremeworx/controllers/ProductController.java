@@ -34,6 +34,7 @@ public class ProductController {
 		return new ResponseEntity<ProductResponse>(productService.getProduct(name),HttpStatus.OK);
 	}
 	
+	
 	@GetMapping
 	public ResponseEntity<List<ProductResponse>> getProducts(){
 		return new ResponseEntity<List<ProductResponse>>(productService.getProducts(),HttpStatus.OK);

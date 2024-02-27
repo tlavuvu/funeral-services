@@ -9,7 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
 
-@Entity(name = "t_members")
+
 @Data
 public class Member extends Person{
 	

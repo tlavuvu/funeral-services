@@ -7,7 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
 
-@Entity(name = "t_beneficiaries")
+
 @Data
 public class Beneficiary extends Person{
 	

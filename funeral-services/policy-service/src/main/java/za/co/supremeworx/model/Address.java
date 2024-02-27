@@ -8,7 +8,6 @@ import jakarta.persistence.OneToMany;
 import lombok.Data;
 
 @Data
-@Entity(name = "t_address")
 public class Address {
 	
 	@Id
