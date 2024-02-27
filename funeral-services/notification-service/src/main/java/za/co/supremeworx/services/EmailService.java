@@ -1,9 +1,11 @@
 package za.co.supremeworx.services;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -50,7 +52,8 @@ public class EmailService {
 		emailTransaction.setTransaction_id(uuid.toString());
 		emailTransaction.setEmailRecipients(convertListToStringArray(email.getRecipients()));
 		long now = System.currentTimeMillis();
-		emailTransaction.setDate(new Date(now));
+//		emailTransaction.setDate(new Date(now));
+		emailTransaction.setTimeStamp(new Timestamp(now));
 		emailTransactionRepository.save(emailTransaction);
 		
 	}
@@ -59,6 +62,14 @@ public class EmailService {
 	public String[] convertListToStringArray(List<Recipient> recipients) {
 		List<String> myList = recipients.stream().map(recipient -> recipient.getEmailAddress()).collect(Collectors.toList());
 				return myList.toArray(new String[0]);
+	}
+	
+	public List<EmailTransaction> convertIterableToList( Iterable<EmailTransaction> transactions) {
+		return StreamSupport.stream(transactions.spliterator(), false).collect(Collectors.toList());
+	}
+	
+	public List<EmailTransaction> getAllEmailTransactions() {
+		return convertIterableToList(emailTransactionRepository.findAll());
 	}
 
 }

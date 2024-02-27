@@ -1,6 +1,7 @@
 package za.co.supremeworx.model;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,7 +18,8 @@ public class EmailTransaction {
 	private int id;
 	
 	private String transaction_id;
-	private Date date;
+//	private Date date;
+	private Timestamp timeStamp;
 	private String[] emailRecipients;
 
 }
