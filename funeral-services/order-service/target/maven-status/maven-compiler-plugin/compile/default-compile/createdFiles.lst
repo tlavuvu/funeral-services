@@ -1,8 +1,0 @@
-za\co\supremeworx\dto\OrderLineItemsDto.class
-za\co\supremeworx\repository\OrderRepository.class
-za\co\supremeworx\dto\OrderRequest.class
-za\co\supremeworx\OrderServiceApplication.class
-za\co\supremeworx\model\Order.class
-za\co\supremeworx\model\OrderLineItems.class
-za\co\supremeworx\controllers\OrderController.class
-za\co\supremeworx\services\OrderService.class
